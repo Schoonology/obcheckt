@@ -1,6 +1,7 @@
 /*global describe:true, it:true, before:true, after:true, beforeEach:true, afterEach:true */
 var expect = require('chai').expect
-  , obcheckt = require('../lib/obcheckt');
+  , obcheckt = require('../lib/obcheckt')
+  , ObchecktError = obcheckt.ObchecktError
 
 describe('Obcheckt', function () {
   describe('Rule #0', function () {
@@ -30,7 +31,7 @@ describe('Obcheckt', function () {
     it('should fail non-null values', function () {
       expect(function () {
         obcheckt.validate(42, null)
-      }).to.throw
+      }).to.throw(ObchecktError)
 
       expect(function () {
         obcheckt.validate({
@@ -38,14 +39,14 @@ describe('Obcheckt', function () {
         }, {
           key: null
         })
-      }).to.throw
+      }).to.throw(ObchecktError)
 
       expect(function () {
         obcheckt.validate({
         }, {
           key: null
         })
-      }).to.throw
+      }).to.throw(ObchecktError)
     })
   })
 
@@ -67,11 +68,11 @@ describe('Obcheckt', function () {
     it('should fail invalid Arrays', function () {
       expect(function () {
         obcheckt.validate([42], [String])
-      }).to.throw
+      }).to.throw(ObchecktError)
 
       expect(function () {
         obcheckt.validate([1, 2, 3, 4, true], [Number])
-      }).to.throw
+      }).to.throw(ObchecktError)
 
       expect(function () {
         obcheckt.validate({
@@ -79,17 +80,17 @@ describe('Obcheckt', function () {
         }, {
           key: [Number]
         })
-      }).to.throw
+      }).to.throw(ObchecktError)
     })
 
     it('should fail non-Arrays', function () {
       expect(function () {
         obcheckt.validate({}, [])
-      }).to.throw
+      }).to.throw(ObchecktError)
 
       expect(function () {
         obcheckt.validate(42, [Number])
-      }).to.throw
+      }).to.throw(ObchecktError)
     })
   })
 
@@ -110,19 +111,19 @@ describe('Obcheckt', function () {
     it('should fail invalid instances', function () {
       expect(function () {
         obcheckt.validate(42, String)
-      }).to.throw
+      }).to.throw(ObchecktError)
 
       expect(function () {
         obcheckt.validate({}, Number)
-      }).to.throw
+      }).to.throw(ObchecktError)
 
       expect(function () {
         obcheckt.validate(true, Object)
-      }).to.throw
+      }).to.throw(ObchecktError)
 
       expect(function () {
         obcheckt.validate('foo', Boolean)
-      }).to.throw
+      }).to.throw(ObchecktError)
     })
   })
 
@@ -145,15 +146,15 @@ describe('Obcheckt', function () {
     it('should fail unequal primitive values', function () {
       expect(function () {
         obcheckt.validate(42, 23)
-      }).to.throw
+      }).to.throw(ObchecktError)
 
       expect(function () {
         obcheckt.validate('answer', 'foo')
-      }).to.throw
+      }).to.throw(ObchecktError)
 
       expect(function () {
         obcheckt.validate('answer', 42) // Rule #4
-      }).to.throw
+      }).to.throw(ObchecktError)
 
       expect(function () {
         obcheckt.validate({
@@ -161,7 +162,7 @@ describe('Obcheckt', function () {
         }, {
           key: false
         })
-      }).to.throw
+      }).to.throw(ObchecktError)
     })
   })
 
@@ -198,7 +199,7 @@ describe('Obcheckt', function () {
         , b: Boolean
         , c: String
         })
-      }).to.throw
+      }).to.throw(ObchecktError)
     })
 
     it('should fail objects with missing keys', function () {
@@ -211,7 +212,15 @@ describe('Obcheckt', function () {
         , b: Boolean
         , c: [String]
         })
-      }).to.throw
+      }).to.throw(ObchecktError)
+    })
+
+    it('should fail null "object"s', function () {
+      expect(function () {
+        obcheckt.validate(null, {
+          key: String
+        })
+      }).to.throw(ObchecktError)
     })
   })
 
@@ -231,7 +240,7 @@ describe('Obcheckt', function () {
         }, {
           key: String
         })
-      }).to.throw
+      }).to.throw(ObchecktError)
     })
 
     it('should ignore null Optional values', function () {
