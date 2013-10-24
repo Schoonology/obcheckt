@@ -258,4 +258,62 @@ describe('Obcheckt', function () {
       })
     })
   })
+
+  describe('Undefined', function () {
+    it('should pass on missing key', function () {
+      obcheckt.validate({}, {
+        key: obcheckt.Undefined
+      })
+    })
+
+    it('should pass on undefined key', function () {
+      obcheckt.validate({
+        key: undefined
+      }, {
+        key: obcheckt.Undefined
+      })
+    })
+
+    it('should pass on null key', function () {
+      obcheckt.validate({
+        key: null
+      }, {
+        key: obcheckt.Undefined
+      })
+    })
+
+    it('should fail on non-null, non-undefined values', function () {
+      expect(function () {
+        obcheckt.validate({
+          key: 42
+        }, {
+          key: obcheckt.Undefined
+        })
+      }).to.throw(ObchecktError)
+
+      expect(function () {
+        obcheckt.validate({
+          key: false
+        }, {
+          key: obcheckt.Undefined
+        })
+      }).to.throw(ObchecktError)
+
+      expect(function () {
+        obcheckt.validate({
+          key: {}
+        }, {
+          key: obcheckt.Undefined
+        })
+      }).to.throw(ObchecktError)
+
+      expect(function () {
+        obcheckt.validate({
+          key: 'answer'
+        }, {
+          key: obcheckt.Undefined
+        })
+      }).to.throw(ObchecktError)
+    })
+  })
 })
