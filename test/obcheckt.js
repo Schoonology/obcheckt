@@ -55,6 +55,7 @@ describe('Obcheckt', function () {
       obcheckt.validate([42], [Number])
       obcheckt.validate([1, 2, 3, 4, 5], [Number])
       obcheckt.validate([1, 2, 3, 'foo', true], [])
+      obcheckt.validate([1, 2, 3, 4, 5], [1, 2, 3, 4, 5])
 
       obcheckt.validate({
         key: ['Earth']
@@ -72,6 +73,10 @@ describe('Obcheckt', function () {
 
       expect(function () {
         obcheckt.validate([1, 2, 3, 4, true], [Number])
+      }).to.throw(ObchecktError)
+
+      expect(function () {
+        obcheckt.validate([1, 2, 3, 4, 5], [5, 4, 3, 2, 1])
       }).to.throw(ObchecktError)
 
       expect(function () {
