@@ -1,6 +1,6 @@
 {
   "name": "obcheckt",
-  "version": "0.1.6",
+  "version": "1.0.0",
   "description": "A simple Object format checker.",
   "main": "index.js",
   "directories": {
