@@ -54,7 +54,6 @@ describe('Obcheckt', function () {
     it('should pass valid Arrays', function () {
       obcheckt.validate([42], [Number])
       obcheckt.validate([1, 2, 3, 4, 5], [Number])
-      obcheckt.validate([1, 2, 3, 'foo', true], [])
       obcheckt.validate([1, 2, 3, 4, 5], [1, 2, 3, 4, 5])
 
       obcheckt.validate({
@@ -76,7 +75,19 @@ describe('Obcheckt', function () {
       }).to.throw(ObchecktError)
 
       expect(function () {
+        obcheckt.validate([1, 2, 3, 'foo', true], [])
+      }).to.throw(ObchecktError)
+
+      expect(function () {
         obcheckt.validate([1, 2, 3, 4, 5], [5, 4, 3, 2, 1])
+      }).to.throw(ObchecktError)
+
+      expect(function () {
+        obcheckt.validate([1, 2, 3, 4, 5], [1, 1, 1, 1, 1])
+      }).to.throw(ObchecktError)
+
+      expect(function () {
+        obcheckt.validate([1, 1], [1])
       }).to.throw(ObchecktError)
 
       expect(function () {
