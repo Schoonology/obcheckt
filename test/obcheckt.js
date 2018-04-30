@@ -63,6 +63,13 @@ describe('Obcheckt', function () {
       })
 
       obcheckt.validate([], [Boolean])
+      obcheckt.validate([{
+        name: 'Sally'
+      }, {
+        name: 'John'
+      }], [{
+        name: String
+      }])
     })
 
     it('should fail invalid Arrays', function () {
@@ -76,7 +83,7 @@ describe('Obcheckt', function () {
 
       expect(function () {
         obcheckt.validate([1, 2, 3, 'foo', true], [])
-      }).to.throw(ObchecktError)
+      }, 'array is not empty').to.throw(ObchecktError)
 
       expect(function () {
         obcheckt.validate([1, 2, 3, 4, 5], [5, 4, 3, 2, 1])
@@ -88,7 +95,11 @@ describe('Obcheckt', function () {
 
       expect(function () {
         obcheckt.validate([1, 1], [1])
-      }).to.throw(ObchecktError)
+      }, 'array is too long').to.throw(ObchecktError)
+
+      expect(function () {
+        obcheckt.validate([1], [1, 1])
+      }, 'array is too short').to.throw(ObchecktError)
 
       expect(function () {
         obcheckt.validate({
@@ -97,6 +108,16 @@ describe('Obcheckt', function () {
           key: [Number]
         })
       }).to.throw(ObchecktError)
+
+      expect(function () {
+        obcheckt.validate([{
+          name: 42
+        }, {
+          name: 'John'
+        }], [{
+          name: Number
+        }])
+      }, 'mixed objects, type spec').to.throw(ObchecktError)
     })
 
     it('should fail non-Arrays', function () {
