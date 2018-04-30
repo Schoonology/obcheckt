@@ -136,6 +136,36 @@ describe('Obcheckt', function () {
     // Rule #5 is a superset. Rule #4 is just there for simpler info.
   })
 
+  describe('Rule #3.5', function () {
+    it('should pass strings that match regexes', function () {
+      obcheckt.validate('test', /test/)
+      obcheckt.validate('longer value', /val/)
+      obcheckt.validate({
+        key: 'value'
+      }, {
+        key: /^value$/
+      })
+    })
+
+    it('should fail strings that miss regexes', function () {
+      expect(function () {
+        obcheckt.validate('foo', /bar/)
+      }).to.throw(ObchecktError)
+
+      expect(function () {
+        obcheckt.validate(42, /bar/)
+      }).to.throw(ObchecktError)
+
+      expect(function () {
+        obcheckt.validate({
+          key: 'right'
+        }, {
+          key: /^wrong$/
+        })
+      }).to.throw(ObchecktError)
+    })
+  })
+
   describe('Rule #5', function () {
     it('should pass identical primitive values', function () {
       obcheckt.validate(42, 42)
